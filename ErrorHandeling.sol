@@ -1,24 +1,31 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-contract errorHandling_vottingSystem {
-    mapping(string => bool) public hasVoted;
-    mapping(string => uint) public voteCount;
+contract BookMyShow {
+    uint256 public totalTickets = 100;
+    uint256 public ticketsSold;
+    mapping(address => uint256) public userTickets;
 
-    function vote(string memory candidate ,uint _age) external {
-        ageVerify(_age);
 
-        require(!hasVoted[candidate], "You have already voted");
-
-        voteCount[candidate] += 1;
-        hasVoted[candidate] = true;
-
-        assert(voteCount[candidate] > 0);
+    function bookTickets(uint256 quantity) public {
+        require(quantity > 0, "You must book at least one 1");
+        if (ticketsSold + quantity > totalTickets) {
+            revert("Not Enough tickets available");
+        }
+        userTickets[msg.sender]+=quantity;
+        ticketsSold+=quantity;
+        assert(ticketsSold <= totalTickets);
     }
 
-    function ageVerify(uint _age) public pure {
-        if(_age < 18) {
-            revert("Not Yet Eligible");
-        }
+    function cancelTickets(uint256 quantity) public {
+        require(quantity > 0, "Number should be atleast one");
+        require(userTickets[msg.sender] >= quantity, "You do not have Enough Tickets");
+        userTickets[msg.sender] -= quantity;
+        ticketsSold -= quantity;
+        assert(ticketsSold >= 0);
+    }
+
+    function getRemainingTickets() public view returns (uint256) {
+        return totalTickets - ticketsSold;
     }
 }
