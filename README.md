@@ -1,37 +1,41 @@
 # Error Handling AVAX
-## Voting System 
-An overview, instructions, and information about the error handling functions used in the "Voting System Smart Contract".
+# **BOOKMYSHOW Event Ticket Booking Smart Contract**
 
-## Description
+This is a smart contract for a **BOOKMYSHOW event ticket booking system**. It allows users to book and cancel multiple tickets. The contract uses Solidity's error-handling mechanisms (`require()`, `assert()`, and `revert()`) to ensure proper validation.
 
-The "Voting System" is a Solidity smart contract that enables voting functionality while incorporating error handling mechanisms. It allows users to cast votes for candidates/proposals and maintains a vote count for each candidate. The contract includes age verification of 18 and above to ensure only eligible voters can participate.
+## **Features**
+- Users can book multiple free tickets for an event.
+- Users can cancel their booked tickets at any time.
+- Utilizes error-handling mechanisms:
+  - `require()`: Validates user input and ticket availability.
+  - `revert()`: Handles conditions when the requested ticket quantity exceeds availability.
+  - `assert()`: Ensures internal state consistency.
 
-## Getting Started
+## **Functions**
 
-### Installing
+### **1. `bookTickets(uint256 quantity)`**
+Books a specified number of tickets.
 
-To use the "Voting System", follow these steps:
+- **Input**: 
+  - `quantity` (uint256): Number of tickets to book.
+- **Validations**:
+  - Must book at least one ticket (`require()`).
+  - Requested tickets should not exceed the remaining available tickets (`revert()`).
 
-1. Download the Solidity compiler and development environment (e.g., Remix or Hardhat).
-2. Create a new Solidity file and copy the code into the file.
 
-### Executing Program
+### **2. `cancelTickets(uint256 quantity)`**
+Cancels a specified number of previously booked tickets.
 
-To deploy and interact with the smart contract, follow these steps:
+- **Input**:
+  - `quantity` (uint256): Number of tickets to cancel.
+- **Validations**:
+  - Must cancel at least one ticket (`require()`).
+  - User must have enough tickets to cancel (`require()`).
 
-1. Deploy the smart contract on a compatible blockchain network using your chosen development environment.
-2. Connect your chosen user interface (e.g., DApp, web application) to the deployed smart contract.
-3. Use the provided functions to interact with the contract, such as `vote()` to cast a vote and `getResult()` to retrieve vote counts.
 
-## Error Handling
+### **3. `getRemainingTickets() → uint256`**
+Returns the number of remaining tickets available for booking.
 
-The "Voting System" implements the following error handling mechanisms:
-
-- The `require()` statement is used to validate conditions and ensure specific requirements are met. For example, it is used to check if a voter has already voted and to verify that the amount being deposited is greater than zero.
-- The `assert()` statement is utilized for internal consistency checks. It helps catch and handle logical errors. In the context of the contract, it is used to ensure that the vote count for a candidate is greater than zero.
-- The `revert()` statement is employed to handle exceptional cases or invalid conditions. For instance, it is used to revert the transaction if the age verification fails, or if the division result is zero during vote counting.
-
-These error handling mechanisms help maintain the integrity and security of the contract by enforcing constraints and preventing undesirable or unintended behavior.
 
 ## Help
 
